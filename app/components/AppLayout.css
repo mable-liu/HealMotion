@@ -1,0 +1,117 @@
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    background: #f8a3a3; /* Gradient from pink to blue */
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: fixed; /* Ensure it stays fixed on the side */
+    top: 0;
+    left: 0;
+    height: 100%;
+    transform: translateX(-100%); /* Initially hidden */
+    transition: transform 0.3s ease; /* Smooth transition for visibility */
+    z-index: 999;
+}
+
+.sidebar.visible {
+    transform: translateX(0); /* Make sidebar visible */
+}
+
+.sidebar h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.sidebar ul li {
+    margin: 10px 0;
+    width: 100%;
+    text-align: start;
+}
+
+.sidebar ul li a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+    width: 100%;
+}
+
+.sidebar ul li a:hover {
+    background-color: #8fabde;
+    color: white;
+    font-weight: bold;
+}
+
+/* Toggle Button */
+.menu-toggle {
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    z-index: 1000;
+    background-color: #ffffff43;
+    border: none;
+    color: rgb(255, 255, 255);
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.menu-toggle:hover {
+    background-color: #8fabde;
+}
+
+.menu-toggle:active {
+    transform: scale(0.95);
+}
+
+.sidebar.visible + .main-content {
+    margin-left: 250px; /* Adjust margin when sidebar is visible */
+}
+
+.submit-button {
+    padding: 20px 20px;
+    background-color: #7da9e3;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+    display: inline-block; /* Change to inline-block for dynamic wrapping */
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 40px;
+    background: #ffffff00; /* Gradient from pink to blue */
+    color: white;
+    transition: margin-left 0.3s ease;
+    margin-left: 0; /* Ensure margin is zero when sidebar is hidden */
+    min-height: 100vh; /* Ensure it spans the full height */
+}
