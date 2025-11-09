@@ -15,7 +15,7 @@
   ],
   "routes": [
     {
-      "src": "/api/(profile|analyze|diet)",
+      "src": "/api/(profile|analyze|diet|healthz)",
       "dest": "api/index.py"
     },
     {
