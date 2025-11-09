@@ -2,7 +2,7 @@
 
 Use this checklist to ensure a successful deployment of HealMotion to Vercel.
 
-## Pre-Deployment Checklist
+## Pre-Deployment Checklist 
 
 ### Local Verification
 - [x] All legacy directories removed (api/, backend/, frontend/, healmotion-next/)
