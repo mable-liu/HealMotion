@@ -1,6 +1,6 @@
 # Vercel Deployment Checklist
 
-Use this checklist to ensure a successful deployment of HealMotion to Vercel.
+Use this checklist to ensure a successful deployment of HealMotion to Vercel. 
 
 ## Pre-Deployment Checklist 
 
