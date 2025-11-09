@@ -10,9 +10,11 @@ import logging
 
 try:
     import requests
+    from requests import RequestException
     REQUESTS_IMPORT_ERROR = None
 except Exception as import_error:
     requests = None
+    RequestException = Exception
     REQUESTS_IMPORT_ERROR = import_error
 
 logging.basicConfig(level=logging.INFO)
@@ -84,7 +86,7 @@ def generate_ai_text(prompt: str) -> str:
         if not parts:
             raise ValueError("No content parts found in AI response.")
         return parts[0].get("text", "")
-    except requests.RequestException as req_err:
+    except RequestException as req_err:
         logger.exception("Gemini API request failed")
         raise HTTPException(status_code=502, detail=f"AI service request failed: {req_err}")
     except ValueError as val_err:
