@@ -128,7 +128,7 @@ export default function DietPage() {
                         </div>
                     ))
                 ) : (
-                    !error && !isLoading && <p>No diet plan available, please submit an injury.</p>
+                    !error && !isLoading && <p style={{ textAlign: 'center' }}>No diet plan available, please submit an injury.</p>
                 )}
             </div>
             <Modal

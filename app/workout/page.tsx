@@ -156,7 +156,7 @@ export default function WorkoutPage() {
                         </div>
                     ))
                 ) : (
-                    !error && !isLoading && <p>No workout plan available, please submit an injury.</p>
+                    !error && !isLoading && <p style={{ textAlign: 'center' }}>No workout plan available, please submit an injury.</p>
                 )}
             </div>
         </div>
