@@ -17,6 +17,8 @@ except Exception as import_error:
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("heal_motion_api")
+logger.setLevel(logging.INFO)
+print("HealMotion serverless API module loaded", flush=True)
 
 # Load environment variables
 try:
@@ -106,8 +108,7 @@ async def update_profile(profile: ProfileData, request: Request):
     try:
         user_id = get_user_id(request)
         user_profiles[user_id] = profile.dict()
-        print("Received profile data:", profile.dict())
-        print("Stored profile data for user:", user_profiles[user_id])
+        logger.info("Stored profile for user_id=%s payload=%s", user_id, profile.dict())
         return {"message": "Profile updated successfully!"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -122,6 +123,7 @@ async def analyze_injury(injury_request: InjuryRequest, request: Request):
 
         # Retrieve profile data
         user_id = get_user_id(request)
+        logger.info("Analyze request user_id=%s injury=%s", user_id, injury)
         profile_data = user_profiles.get(user_id, {})
 
         if not isinstance(profile_data, dict):
@@ -207,6 +209,7 @@ async def analyze_diet(injury_request: InjuryRequest, request: Request):
 
         # Retrieve profile data
         user_id = get_user_id(request)
+        logger.info("Diet request user_id=%s injury=%s", user_id, injury)
         profile_data = user_profiles.get(user_id, {})
 
         if not isinstance(profile_data, dict):
@@ -267,6 +270,15 @@ async def analyze_diet(injury_request: InjuryRequest, request: Request):
     except Exception as e:
         print(f"Error occurred: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get('/healthz')
+async def healthcheck():
+    return {
+        "status": "ok",
+        "requests_available": REQUESTS_IMPORT_ERROR is None,
+        "model": MODEL_NAME,
+    }
 
 # Vercel serverless function handler
 handler = Mangum(app, lifespan="off")
