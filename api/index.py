@@ -7,15 +7,8 @@ import os
 import json
 import re
 import logging
-
-try:
-    import requests
-    from requests import RequestException
-    REQUESTS_IMPORT_ERROR = None
-except Exception as import_error:
-    requests = None
-    RequestException = Exception
-    REQUESTS_IMPORT_ERROR = import_error
+import urllib.request
+import urllib.error
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("heal_motion_api")
@@ -56,8 +49,6 @@ def get_user_id(request: Request) -> str:
 
 
 def generate_ai_text(prompt: str) -> str:
-    if REQUESTS_IMPORT_ERROR is not None:
-        raise HTTPException(status_code=500, detail=f"'requests' dependency is unavailable: {REQUESTS_IMPORT_ERROR}")
     if not API_KEY:
         raise HTTPException(status_code=500, detail="API key not configured. Please set GEMINI_API_KEY environment variable.")
 
@@ -71,14 +62,16 @@ def generate_ai_text(prompt: str) -> str:
         ]
     }
     try:
-        response = requests.post(
-            GEMINI_ENDPOINT,
-            params={"key": API_KEY},
-            json=payload,
-            timeout=40,
+        data_bytes = json.dumps(payload).encode("utf-8")
+        request = urllib.request.Request(
+            url=f"{GEMINI_ENDPOINT}?key={API_KEY}",
+            data=data_bytes,
+            headers={"Content-Type": "application/json"},
+            method="POST",
         )
-        response.raise_for_status()
-        data = response.json()
+        with urllib.request.urlopen(request, timeout=40) as response:
+            body = response.read()
+            data = json.loads(body.decode("utf-8"))
         candidates = data.get("candidates", [])
         if not candidates:
             raise ValueError("No candidates returned from AI model.")
@@ -86,9 +79,13 @@ def generate_ai_text(prompt: str) -> str:
         if not parts:
             raise ValueError("No content parts found in AI response.")
         return parts[0].get("text", "")
-    except RequestException as req_err:
+    except urllib.error.HTTPError as http_err:
         logger.exception("Gemini API request failed")
-        raise HTTPException(status_code=502, detail=f"AI service request failed: {req_err}")
+        detail = http_err.read().decode("utf-8", errors="ignore")
+        raise HTTPException(status_code=http_err.code, detail=f"AI service request failed: {detail or http_err}")
+    except urllib.error.URLError as url_err:
+        logger.exception("Gemini API unreachable")
+        raise HTTPException(status_code=502, detail=f"AI service request failed: {url_err}")
     except ValueError as val_err:
         logger.exception("Gemini API returned unexpected payload")
         raise HTTPException(status_code=500, detail=str(val_err))
