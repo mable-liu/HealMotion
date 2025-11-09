@@ -39,6 +39,16 @@ else:
 
 user_profiles = {}
 
+def get_user_id(request: Request) -> str:
+    """Derive a stable identifier for the requester even when client info is missing."""
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    if request.client:
+        return request.client.host or "anonymous"
+    return "anonymous"
+
+
 # Pydantic models
 class ProfileData(BaseModel):
     age: Optional[int] = None
@@ -53,7 +63,7 @@ class InjuryRequest(BaseModel):
 @app.post('/profile')
 async def update_profile(profile: ProfileData, request: Request):
     try:
-        user_id = request.client.host
+        user_id = get_user_id(request)
         user_profiles[user_id] = profile.dict()
         print("Received profile data:", profile.dict())
         print("Stored profile data for user:", user_profiles[user_id])
@@ -73,7 +83,7 @@ async def analyze_injury(injury_request: InjuryRequest, request: Request):
             raise HTTPException(status_code=400, detail="No injury provided")
 
         # Retrieve profile data
-        user_id = request.client.host
+        user_id = get_user_id(request)
         profile_data = user_profiles.get(user_id, {})
 
         if not isinstance(profile_data, dict):
@@ -162,7 +172,7 @@ async def analyze_diet(injury_request: InjuryRequest, request: Request):
             raise HTTPException(status_code=400, detail="No injury provided")
 
         # Retrieve profile data
-        user_id = request.client.host
+        user_id = get_user_id(request)
         profile_data = user_profiles.get(user_id, {})
 
         if not isinstance(profile_data, dict):
