@@ -6,7 +6,7 @@ Use this checklist to ensure a successful deployment of HealMotion to Vercel.
 
 ### Local Verification
 - [x] All legacy directories removed (api/, backend/, frontend/, healmotion-next/)
-- [x] Next.js app is in repository root
+- [x] Next.js app is in repository root 
 - [x] `npm run build` completes successfully
 - [x] All routes are properly generated
 - [x] Environment variables template created (.env.local.example)
