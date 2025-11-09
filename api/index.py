@@ -2,10 +2,11 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
 from pydantic import BaseModel
-from typing import Optional, Dict, List
+from typing import Optional
 import os
 import json
 import re
+import requests
 
 # Load environment variables
 try:
@@ -13,12 +14,6 @@ try:
     load_dotenv()
 except ImportError:
     pass
-
-# Import genai only if needed
-try:
-    import google.generativeai as genai
-except ImportError:
-    genai = None
 
 app = FastAPI()
 
@@ -31,11 +26,8 @@ app.add_middleware(
 )
 
 API_KEY = os.getenv("GEMINI_API_KEY")
-if API_KEY and genai:
-    genai.configure(api_key=API_KEY)
-    model = genai.GenerativeModel("gemini-1.5-flash")
-else:
-    model = None
+MODEL_NAME = os.getenv("GEMINI_MODEL", "models/gemini-1.5-flash")
+GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/{MODEL_NAME}:generateContent"
 
 user_profiles = {}
 
@@ -47,6 +39,41 @@ def get_user_id(request: Request) -> str:
     if request.client:
         return request.client.host or "anonymous"
     return "anonymous"
+
+
+def generate_ai_text(prompt: str) -> str:
+    if not API_KEY:
+        raise HTTPException(status_code=500, detail="API key not configured. Please set GEMINI_API_KEY environment variable.")
+
+    payload = {
+        "contents": [
+            {
+                "parts": [
+                    {"text": prompt}
+                ]
+            }
+        ]
+    }
+    try:
+        response = requests.post(
+            GEMINI_ENDPOINT,
+            params={"key": API_KEY},
+            json=payload,
+            timeout=40,
+        )
+        response.raise_for_status()
+        data = response.json()
+        candidates = data.get("candidates", [])
+        if not candidates:
+            raise ValueError("No candidates returned from AI model.")
+        parts = candidates[0].get("content", {}).get("parts", [])
+        if not parts:
+            raise ValueError("No content parts found in AI response.")
+        return parts[0].get("text", "")
+    except requests.RequestException as req_err:
+        raise HTTPException(status_code=502, detail=f"AI service request failed: {req_err}")
+    except ValueError as val_err:
+        raise HTTPException(status_code=500, detail=str(val_err))
 
 
 # Pydantic models
@@ -74,9 +101,6 @@ async def update_profile(profile: ProfileData, request: Request):
 @app.post('/analyze')
 async def analyze_injury(injury_request: InjuryRequest, request: Request):
     try:
-        if not model:
-            raise HTTPException(status_code=500, detail="API key not configured. Please set GEMINI_API_KEY environment variable.")
-
         injury = injury_request.injury
 
         if not injury:
@@ -112,8 +136,7 @@ async def analyze_injury(injury_request: InjuryRequest, request: Request):
         )
 
         # Get AI response
-        response = model.generate_content(pre_prompt)
-        raw_response_text = response.candidates[0].content.parts[0].text
+        raw_response_text = generate_ai_text(pre_prompt)
 
         # Extract JSON from response
         json_match = re.search(r"{.*}", raw_response_text, re.DOTALL)
@@ -163,9 +186,6 @@ async def analyze_injury(injury_request: InjuryRequest, request: Request):
 @app.post('/diet')
 async def analyze_diet(injury_request: InjuryRequest, request: Request):
     try:
-        if not model:
-            raise HTTPException(status_code=500, detail="API key not configured. Please set GEMINI_API_KEY environment variable.")
-
         injury = injury_request.injury
 
         if not injury:
@@ -195,8 +215,7 @@ async def analyze_diet(injury_request: InjuryRequest, request: Request):
         )
 
         # Get AI response
-        response = model.generate_content(pre_prompt)
-        raw_response_text = response.candidates[0].content.parts[0].text
+        raw_response_text = generate_ai_text(pre_prompt)
 
         # Extract JSON from response
         json_match = re.search(r"{.*}", raw_response_text, re.DOTALL)

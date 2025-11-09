@@ -1,12 +1,12 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional, Dict, List
+from typing import Optional
 import os
 from dotenv import load_dotenv
-import google.generativeai as genai
 import json
 import re
+import requests
 
 load_dotenv()
 
@@ -24,8 +24,8 @@ API_KEY = os.getenv("GEMINI_API_KEY")
 if not API_KEY:
     raise ValueError("API key not found. Ensure GEMINI_API_KEY is set in your .env file.")
 
-genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel("models/gemini-2.5-flash-lite")
+MODEL_NAME = os.getenv("GEMINI_MODEL", "models/gemini-2.5-flash-lite")
+GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/{MODEL_NAME}:generateContent"
 
 user_profiles = {}
 
@@ -36,6 +36,36 @@ def get_user_id(request: Request) -> str:
     if request.client:
         return request.client.host or "anonymous"
     return "anonymous"
+
+
+def generate_ai_text(prompt: str) -> str:
+    payload = {
+        "contents": [
+            {
+                "parts": [
+                    {"text": prompt}
+                ]
+            }
+        ]
+    }
+    try:
+        response = requests.post(
+            GEMINI_ENDPOINT,
+            params={"key": API_KEY},
+            json=payload,
+            timeout=40,
+        )
+        response.raise_for_status()
+        data = response.json()
+        candidates = data.get("candidates", [])
+        if not candidates:
+            raise ValueError("No candidates returned from AI model.")
+        parts = candidates[0].get("content", {}).get("parts", [])
+        if not parts:
+            raise ValueError("No content parts found in AI response.")
+        return parts[0].get("text", "")
+    except requests.RequestException as req_err:
+        raise HTTPException(status_code=502, detail=f"AI service request failed: {req_err}")
 
 
 # Pydantic models
@@ -98,8 +128,7 @@ async def analyze_injury(injury_request: InjuryRequest, request: Request):
         )
 
         # Get AI response
-        response = model.generate_content(pre_prompt)
-        raw_response_text = response.candidates[0].content.parts[0].text
+        raw_response_text = generate_ai_text(pre_prompt)
 
         # Extract JSON from response
         json_match = re.search(r"{.*}", raw_response_text, re.DOTALL)
@@ -178,8 +207,7 @@ async def analyze_diet(injury_request: InjuryRequest, request: Request):
         )
 
         # Get AI response
-        response = model.generate_content(pre_prompt)
-        raw_response_text = response.candidates[0].content.parts[0].text
+        raw_response_text = generate_ai_text(pre_prompt)
 
         # Extract JSON from response
         json_match = re.search(r"{.*}", raw_response_text, re.DOTALL)
