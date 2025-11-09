@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Workout.css';
 import injuries from '../injuries.json';
+import apiUrl from '../../utils/api';
 
 function WorkoutPage() {
     const [injury, setInjury] = useState('');
@@ -39,7 +40,7 @@ function WorkoutPage() {
         setIsLoading(true);
         setError(null);
 
-        fetch('/api/analyze', {
+        fetch(apiUrl('/analyze'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -41,6 +41,7 @@ cd frontend
 npm install
 npm start
             </pre>
+            <p>Create <code>frontend/.env.local</code> with <code>REACT_APP_API_BASE=http://127.0.0.1:5000</code> so the React dev server forwards API calls to the FastAPI backend during local development. The deployed site keeps the default of <code>/api</code>.</p>
             <p>The React app runs at <code>http://localhost:3000</code>.</p>
         </section>
         <section>

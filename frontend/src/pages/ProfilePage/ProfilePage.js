@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ProfilePage.css';
+import apiUrl from '../../utils/api';
 
 function ProfilePage() {
     const [profile, setProfile] = useState({
@@ -27,7 +28,7 @@ function ProfilePage() {
                 Object.entries(profile).filter(([_, value]) => value !== '')
             );
 
-            const response = await fetch('/api/profile', {
+            const response = await fetch(apiUrl('/profile'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

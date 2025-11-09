@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Modal from '../../components/modal';
 import './DietPage.css';
+import apiUrl from '../../utils/api';
 
 function DietPage() {
     const [diet, setDiet] = useState([]);
@@ -10,7 +11,7 @@ function DietPage() {
 
     const handleFetchDiet = () => {
         setIsLoading(true);
-        fetch('/api/diet', {
+        fetch(apiUrl('/diet'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
