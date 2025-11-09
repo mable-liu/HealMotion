@@ -24,8 +24,8 @@ API_KEY = os.getenv("GEMINI_API_KEY")
 if not API_KEY:
     raise ValueError("API key not found. Ensure GEMINI_API_KEY is set in your .env file.")
 
-MODEL_NAME = os.getenv("GEMINI_MODEL", "models/gemini-2.5-flash-lite")
-GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/{MODEL_NAME}:generateContent"
+MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
+GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent"
 
 user_profiles = {}
 
