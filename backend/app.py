@@ -6,7 +6,17 @@ import os
 from dotenv import load_dotenv
 import json
 import re
-import requests
+import logging
+
+try:
+    import requests
+    REQUESTS_IMPORT_ERROR = None
+except Exception as import_error:
+    requests = None
+    REQUESTS_IMPORT_ERROR = import_error
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("heal_motion_backend")
 
 load_dotenv()
 
@@ -39,6 +49,9 @@ def get_user_id(request: Request) -> str:
 
 
 def generate_ai_text(prompt: str) -> str:
+    if REQUESTS_IMPORT_ERROR is not None:
+        raise HTTPException(status_code=500, detail=f"'requests' dependency is unavailable: {REQUESTS_IMPORT_ERROR}")
+
     payload = {
         "contents": [
             {
@@ -65,6 +78,7 @@ def generate_ai_text(prompt: str) -> str:
             raise ValueError("No content parts found in AI response.")
         return parts[0].get("text", "")
     except requests.RequestException as req_err:
+        logger.exception("Gemini API request failed")
         raise HTTPException(status_code=502, detail=f"AI service request failed: {req_err}")
 
 
