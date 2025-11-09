@@ -1,8 +1,7 @@
 /* General Styling */
 .app-container {
     text-align: center;
-    background: linear-gradient(45deg, #ff8a8a, #86a8e7);
-    background-size: 200% 200%;
+    background-color: transparent;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -11,173 +10,211 @@
     padding: 20px;
     font-family: 'Arial', sans-serif;
     color: #fff;
-    animation: gradientAnimation 8s ease infinite;
-}
-
-/* Keyframes for animating the gradient */
-@keyframes gradientAnimation {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
 }
 
 /* Title */
 .app-container h1 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+    font-size: 3rem;
+    margin-bottom: 32px;
     color: #ffffff;
-    font-weight: bold;
+    font-weight: 700;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+    letter-spacing: -0.02em;
 }
 
 /* Input Container */
 .input-container {
     position: relative;
     width: 90%;
-    max-width: 400px;
-    margin: 0 auto;
+    max-width: 500px;
+}
+
+/* Input Field Placeholder */
+.input-field::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+    opacity: 1;
 }
 
 /* Input Field */
 .input-field {
+    padding: 16px 24px;
     width: 100%;
-    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
     font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    background-color: rgba(255, 255, 255, 0.9);
-    color: #333;
 }
 
 .input-field:focus {
     outline: none;
-    border-color: #659fe5;
-    background-color: #fff;
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
 }
 
 /* Suggestions List */
 .suggestions-list {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 8px);
     left: 0;
     right: 0;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
     list-style: none;
     padding: 0;
-    margin: 5px 0 0 0;
+    margin: 0;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     max-height: 200px;
     overflow-y: auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
 }
 
 .suggestion-item {
-    padding: 10px;
+    padding: 14px 20px;
+    color: #ffffff;
     cursor: pointer;
-    color: #333;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
 }
 
 .suggestion-item:hover {
-    background-color: #f0f0f0;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(4px);
 }
 
 /* Submit Button */
 .submit-button {
-    padding: 12px 20px;
-    background-color: #7da9e3;
+    padding: 14px 32px;
+    background: rgba(125, 169, 227, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     color: white;
     font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 25px;
+    font-weight: 600;
+    border-radius: 16px;
     cursor: pointer;
-    margin-top: 15px;
-    transition: all 0.3s ease;
+    margin-top: 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .submit-button:hover {
-    background-color: #6a9bd8;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background: rgba(125, 169, 227, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
 }
 
 .submit-button:active {
-    background-color: #5a8bc8;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Loading Text */
 .loading-text {
     color: #ffffff;
-    font-weight: bold;
-    margin-top: 15px;
-    font-size: 1.2rem;
-    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-top: 24px;
+    opacity: 0.9;
 }
 
 /* Error Message */
 .error-message {
-    color: #ff4c4c;
-    font-weight: bold;
-    margin-top: 15px;
-    background-color: #ffe5e5;
-    padding: 10px;
-    border-radius: 5px;
+    color: #ff6b6b;
+    font-weight: 600;
+    margin-top: 24px;
+    background: rgba(255, 107, 107, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    padding: 16px 24px;
+    border-radius: 12px;
     text-align: center;
     width: 90%;
-    max-width: 400px;
+    max-width: 500px;
+    box-shadow: 0 4px 16px rgba(255, 107, 107, 0.1);
 }
 
 /* Diet Plan Grid Container */
 .diet-plan-container {
-    margin-top: 20px;
-    display: grid; /* Use CSS grid for layout */
-    grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
-    gap: 20px; /* Space between cards */
-    width: 100%;
-    max-width: 800px;
-    justify-items: center; /* Center cards within grid cells */
-}
-
-.diet-plan-container:last-child {
-    grid-template-columns: repeat(4, 1fr); /* 4 cards for the second row */
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 24px;
+    width: 90%;
+    max-width: 900px;
+    padding: 0 20px;
 }
 
 /* Day Plan Cards */
 .day-plan {
-    border: 1px solid #ffffff00;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: #7097df9c;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 32px 24px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     text-align: center;
-    min-width: 150px; /* Ensure cards have consistent width */
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    min-width: 150px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
 }
 
 .day-plan:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .day-plan h3 {
     margin: 0;
     color: #ffffff;
     font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
 }
 
 /* Responsive Design */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .app-container h1 {
+        font-size: 2.5rem;
+    }
+
     .diet-plan-container {
-        grid-template-columns: repeat(2, 1fr); /* 2 cards per row on small screens */
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 16px;
+    }
+
+    .day-plan {
+        padding: 24px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .input-container {
+        max-width: 100%;
+    }
+
+    .diet-plan-container {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

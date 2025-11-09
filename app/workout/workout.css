@@ -14,59 +14,77 @@
 
 /* Title */
 .app-container h1 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+    font-size: 3rem;
+    margin-bottom: 32px;
     color: #ffffff;
+    font-weight: 700;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+    letter-spacing: -0.02em;
+}
+
+/* Input Container */
+.input-container {
+    position: relative;
+    width: 90%;
+    max-width: 500px;
 }
 
 /* Input Field Placeholder */
 .input-field::placeholder {
-    color: white;
-    opacity: 1; /* Ensures full opacity for the placeholder text */
+    color: rgba(255, 255, 255, 0.7);
+    opacity: 1;
 }
-
 
 /* Input Field */
 .input-field {
-    padding: 12px;
-    width: 90%;
-    max-width: 400px;
-    border: 1px solid #ffffff;
-    border-radius: 25px;
+    padding: 16px 24px;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
     font-size: 16px;
-    box-shadow: inset 0 2px 4px rgba(133, 151, 216, 0.453);
-    background-color: #ffffff4a;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: white;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .input-field:focus {
     outline: none;
-    border-color: #ffffff00;
-    box-shadow: 0 0 8px rgba(115, 148, 207, 0.8);
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
 }
 
 /* Suggestions List */
 .suggestions-list {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
     list-style: none;
     padding: 0;
-    margin: 10px 0 0 0;
-    width: 90%;
-    max-width: 400px;
-    border-radius: 15px;
-    background-color: #6a91dbae;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    max-height: 150px;
+    margin: 0;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    max-height: 200px;
     overflow-y: auto;
+    z-index: 1000;
 }
 
 .suggestion-item {
-    padding: 10px 15px;
+    padding: 14px 20px;
     color: #ffffff;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: left;
-    border-bottom: 1px solid #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .suggestion-item:last-child {
@@ -74,127 +92,201 @@
 }
 
 .suggestion-item:hover {
-    background-color: #3b3f47;
-    transform: translateY(-1px);
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(4px);
 }
 
 /* Submit Button */
 .submit-button {
-    padding: 12px 20px;
-    background-color: #7da9e3;
+    padding: 14px 32px;
+    background: rgba(125, 169, 227, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     color: white;
     font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 25px;
+    font-weight: 600;
+    border-radius: 16px;
     cursor: pointer;
-    margin-top: 15px;
-    transition: all 0.3s ease;
+    margin-top: 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .submit-button:hover {
-    background-color: #6a9bd8;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background: rgba(125, 169, 227, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
 }
 
 .submit-button:active {
-    background-color: #5a8bc8;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading Text */
+.loading-text {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-top: 24px;
+    opacity: 0.9;
 }
 
 /* Error Message */
 .error-message {
-    color: #ff4c4c;
-    font-weight: bold;
-    margin-top: 15px;
-    background-color: #ffe5e5;
-    padding: 10px;
-    border-radius: 5px;
+    color: #ff6b6b;
+    font-weight: 600;
+    margin-top: 24px;
+    background: rgba(255, 107, 107, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    padding: 16px 24px;
+    border-radius: 12px;
     text-align: center;
     width: 90%;
-    max-width: 400px;
+    max-width: 500px;
+    box-shadow: 0 4px 16px rgba(255, 107, 107, 0.1);
 }
 
 /* Workout Plan Container */
 .workout-plan-container {
-    margin-top: 20px;
+    margin-top: 40px;
     width: 90%;
-    max-width: 600px;
+    max-width: 700px;
 }
 
 /* Day Plan Styling */
 .day-plan {
-    border: 1px solid #333;
-    padding: 15px;
-    margin: 15px 0;
-    border-radius: 10px;
-    background-color: #7ca2e782;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 24px;
+    margin: 20px 0;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     text-align: left;
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .day-plan:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .day-plan h3 {
     margin-top: 0;
+    margin-bottom: 16px;
     color: #ffffff;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
 }
 
 /* Exercises List */
 .day-plan ul {
     list-style: none;
     padding-left: 0;
+    margin: 0;
 }
 
-.day-plan li {
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 6px;
-    background-color: #6985c0;
-    transition: background-color 0.3s ease;
-}
-
-.day-plan li:hover {
-    background-color: #444952;
+.day-plan li, .exercise-item {
+    padding: 16px 18px;
+    margin: 12px 0;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
 }
 
+.day-plan li:hover, .exercise-item:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateX(4px);
+}
+
+.exercise-item.expanded {
+    background: rgba(255, 255, 255, 0.12);
+}
+
 .exercise-details {
-    margin-top: 5px;
-    color: #c4c4c4;
-    font-size: 0.9rem;
+    margin-top: 10px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
 
 /* Links */
 .exercise-link {
-    display: block;
-    margin-top: 5px;
+    display: inline-block;
+    margin-top: 10px;
     color: #ffffff;
-    text-decoration: underline;
+    text-decoration: none;
     font-size: 0.9rem;
-    font-weight: bold;
+    font-weight: 600;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .exercise-link:hover {
-    color: #f0f0f0;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
 }
 
 /* Responsive Design */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .app-container h1 {
+        font-size: 2.5rem;
+    }
+
+    .input-container {
+        max-width: 100%;
+    }
+
+    .workout-plan-container {
+        width: 95%;
+    }
+
+    .day-plan {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-container {
+        padding: 16px;
+    }
+
+    .app-container h1 {
+        font-size: 2rem;
+        margin-bottom: 24px;
+    }
+
     .input-field {
-        width: 100%;
+        padding: 14px 20px;
+        font-size: 15px;
     }
 
     .submit-button {
         width: 100%;
+        padding: 14px 24px;
     }
 
-    .workout-plan-container {
-        width: 100%;
+    .day-plan h3 {
+        font-size: 1.5rem;
+    }
+
+    .exercise-item {
+        padding: 14px 16px;
     }
 }
